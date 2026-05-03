@@ -1,0 +1,72 @@
+{% style %}
+ .section-{{ section.id }}{
+    padding-top:{{ section.settings.padding_top }}px;
+    padding-bottom:{{ section.settings.padding_bottom }}px;
+ }
+ @media screen and (max-width: 767px) {
+    .section-{{ section.id }}{
+        padding-top:{{ section.settings.mobile_padding_top }}px;
+        padding-bottom:{{ section.settings.mobile_padding_bottom }}px;
+    }
+    .section-{{ section.id }}.d-none{
+        display: none;
+    }
+ }
+{% endstyle %}
+<div class="section-{{ section.id }} d-none">
+    <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.image.alt }}">
+</div>
+
+{% schema %}
+{
+    "name": "Custom Image Banner",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+        },
+        {
+            "type": "range",
+            "id": "padding_top",
+            "label": "Padding Top",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "padding_bottom",
+            "label": "Padding Bottom",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "mobile_padding_top",
+            "label": "Mobile Padding Top",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "mobile_padding_bottom",
+            "label": "Mobile Padding Bottom",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        }
+    ],
+    "presets": [
+        {
+            "name": "Custom Image Banner"
+        }
+    ]
+}
+{% endschema %}

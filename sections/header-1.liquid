@@ -1,0 +1,117 @@
+{% style %}
+ .section-{{ section.id }}{
+    background-color:{{ section.settings.background }};
+    padding: 10px 0;
+ }
+ .section-{{ section.id }} .header-1-logo{
+    width: {{ section.settings.logo_width }}px;
+ }
+ .section-{{ section.id }} .btn{
+    background-color: {{ section.settings.btn_background }};
+    color: {{ section.settings.btn_text_color }};
+ }
+ .section-{{ section.id }} .btn svg path{
+    fill: {{ section.settings.btn_icon_color }};
+ }
+{% endstyle %}
+<header class="section-{{ section.id }}">
+    <div class="page-width">
+        <div class="header-1-wrapper flex justify-between align-center">
+            <a class="header-1-logo" href="{{ routes.root_url }}">
+                {% if section.settings.logo %}
+                <img src="{{ section.settings.logo | img_url: 'master' }}" alt="{{ section.settings.logo.alt }}">
+                {% else %}
+                <h1>{{ shop.name }}</h1>
+                {% endif %}
+            </a>
+            <div class="announcementbar-text">
+                <p>{{ section.settings.text }}</p>
+            </div>
+            {% render 'button', button_text: section.settings.btn_text, button_url: section.settings.btn_url %}
+        </div>
+    </div>
+</header>
+
+{% schema %}
+{
+    "name": "Header 1",
+    "settings": [
+        {
+            "type": "color",
+            "id": "background",
+            "label": "Background Color",
+            "default": "#F5F5F5"
+        },
+        {
+            "type": "image_picker",
+            "id": "logo",
+            "label": "Logo"
+        },
+        {
+            "type": "range",
+            "id": "logo_width",
+            "label": "Logo Width",
+            "min": 50,
+            "max": 200,
+            "step": 2,
+            "default": 154,
+            "unit": "px"
+        },
+        {
+            "type": "text",
+            "id": "text",
+            "label": "Text",
+            "default": "Free Shipping on orders over $50"
+        },
+        {
+            "type": "text",
+            "id": "btn_text",
+            "label": "Button Text",
+            "default": "Shop Now"
+        },
+        {
+            "type": "url",
+            "id": "btn_url",
+            "label": "Button URL"
+        },
+        {
+            "type": "color",
+            "id": "btn_background",
+            "label": "Button Background",
+            "default": "#FFF544"
+        },
+        {
+            "type": "color",
+            "id": "btn_text_color",
+            "label": "Button Text Color",
+            "default": "#000"
+        },
+        {
+            "type": "color",
+            "id": "btn_icon_color",
+            "label": "Button Icon Color",
+            "default": "#000"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "link",
+            "name": "Link",
+            "limit": 6,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title",
+                    "default": "Menu"
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "URL"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

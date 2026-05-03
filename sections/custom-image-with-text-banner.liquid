@@ -1,0 +1,278 @@
+{% style %}
+ .section-{{ section.id }}{
+    padding: 10px 0;
+ }
+ .section-{{ section.id }}.banner-with-text-wrapper .page-width{
+    padding-right: 0;
+ }
+ .section-{{ section.id }} .banner-wrapper{
+    gap: 10px;
+ }
+ .section-{{ section.id }} .banner-wrapper h1{
+    font-size: 70px;
+    line-height: 1;
+    font-weight: 500;
+    margin-bottom: 50px;
+ }
+ .section-{{ section.id }} .banner-wrapper p{
+    font-size: 20px;
+    line-height: 1.2;
+    font-weight: 400;
+    margin-bottom: 50px;
+ }
+ .section-{{ section.id }} .banner-image{
+    max-width: calc(100% - 490px);
+    flex: 0 0 calc(100% - 490px);
+ }
+ .section-{{ section.id }} .banner-text{
+    max-width: 480px;
+    flex: 0 0 480px;
+ }
+ .section-{{ section.id }} .banner-text .btn{
+    width: max-content;
+ }
+ .section-{{ section.id }} .d-desktop-none{
+    display: none;
+ }
+ .section-{{ section.id }} .d-mobile-none{
+    display: block;
+ }
+ {% for block in section.blocks %}
+ {% if block.type == 'text' %}
+    .section-{{ section.id }} .btn{
+        background-color: {{ block.settings.btn_background }};
+        color: {{ block.settings.btn_text_color }};
+    }
+    .section-{{ section.id }} .btn svg path{
+    fill: {{ block.settings.btn_icon_color }};
+ }
+ {% endif %}
+ {% endfor %}
+ .section-{{ section.id }}{
+    padding-top:{{ section.settings.padding_top }}px;
+    padding-bottom:{{ section.settings.padding_bottom }}px;
+ }
+ @media screen and (max-width: 991px) {
+     .section-{{ section.id }} .page-width{
+        padding-left: 20px;
+    }
+     .section-{{ section.id }} .banner-image{
+        max-width: calc(60% - 10px);
+        flex: 0 0 calc(60% - 10px);
+    }
+    .section-{{ section.id }} .banner-text{
+        max-width: 40%;
+        flex: 0 0 40%;
+    }
+     .section-{{ section.id }} .banner-wrapper h1{
+        font-size: 30px;
+        margin-bottom: 24px;
+    }
+    .section-{{ section.id }} .banner-wrapper p{
+        font-size: 16px;
+        font-weight: 400;
+        margin-bottom: 24px;
+    }
+ }
+ @media screen and (max-width: 767px) {
+    .section-{{ section.id }}{
+        padding-top:{{ section.settings.mobile_padding_top }}px;
+        padding-bottom:{{ section.settings.mobile_padding_bottom }}px;
+    }
+     .section-{{ section.id }} .page-width{
+        padding-left: 0;
+        padding-right: 0;
+    }
+     .section-{{ section.id }} .banner-image{
+        max-width: 100%;
+        flex: 0 0 100%;
+        position: relative;
+    }
+     .section-{{ section.id }} .banner-text {
+        text-align: center;
+        padding: 50px 20px 12px 20px;
+    }
+    .section-{{ section.id }} .banner-text{
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+    .section-{{ section.id }} .banner-wrapper .btn{
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .section-{{ section.id }} .d-mobile-none{
+        display: none;
+    }
+    .section-{{ section.id }} .d-desktop-none{
+        display: block;
+    }
+ }
+{% endstyle %}
+<header class="section-{{ section.id }} banner-with-text-wrapper">
+    <div class="page-width">
+        <div class="banner-wrapper flex justify-between align-center">
+        {% for block in section.blocks %}
+            {% if block.type == 'image' %}
+            <div class="banner-image">
+                <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
+                {% render 'button', button_text: block.settings.btn_text, button_url: block.settings.btn_url, class: 'd-desktop-none' %}
+            </div>
+            {% endif %}
+            {% if block.type == 'text' %}
+            <div class="banner-text">
+                <h1>{{ block.settings.title }}</h1>
+                <div class="d-mobile-none">{{ block.settings.text }}</div>
+                <div class="d-desktop-none">{{ block.settings.text-mobile }}</div>
+                {% render 'button', button_text: block.settings.btn_text, button_url: block.settings.btn_url, class: 'd-mobile-none' %}
+            </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </div>
+</header>
+
+{% schema %}
+{
+    "name": "Custom Banner With Text",
+    "settings": [
+        {
+            "type": "range",
+            "id": "padding_top",
+            "label": "Padding Top",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "padding_bottom",
+            "label": "Padding Bottom",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "mobile_padding_top",
+            "label": "Mobile Padding Top",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "mobile_padding_bottom",
+            "label": "Mobile Padding Bottom",
+            "default": 0,
+            "min": 0,
+            "max": 100,
+            "step": 1
+        }
+    ],
+    "blocks": [
+        {
+            "type": "image",
+            "name": "Image",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                },
+                {
+                    "type": "text",
+                    "id": "btn_text",
+                    "label": "Button Text",
+                    "default": "Shop Now"
+                },
+                {
+                    "type": "url",
+                    "id": "btn_url",
+                    "label": "Button URL"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_background",
+                    "label": "Button Background Color",
+                    "default": "#000"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_text_color",
+                    "label": "Button Text Color",
+                    "default": "#fff"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_icon_color",
+                    "label": "Button Icon Color",
+                    "default": "#fff"
+                }
+            ]
+        },
+        {
+            "type": "text",
+            "name": "Text",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title",
+                    "default": "Free Shipping on orders over $50"
+                },
+                {
+                    "type": "richtext",
+                    "id": "text",
+                    "label": "Text",
+                    "default": "<p>Free Shipping on orders over $50</p>"
+                },
+                {
+                    "type": "richtext",
+                    "id": "text-mobile",
+                    "label": "Text Mobile",
+                    "default": "<p>Free Shipping on orders over $50</p>"
+                },
+                {
+                    "type": "text",
+                    "id": "btn_text",
+                    "label": "Button Text",
+                    "default": "Shop Now"
+                },
+                {
+                    "type": "url",
+                    "id": "btn_url",
+                    "label": "Button URL"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_background",
+                    "label": "Button Background Color",
+                    "default": "#000"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_text_color",
+                    "label": "Button Text Color",
+                    "default": "#fff"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_icon_color",
+                    "label": "Button Icon Color",
+                    "default": "#fff"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Custom Banner With Text"
+        }
+    ]
+}
+{% endschema %}

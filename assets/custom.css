@@ -1,0 +1,62 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Lustria&display=swap');
+
+.lustria-regular {
+    font-family: "Lustria", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.page-width {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 0 50px;
+}
+
+img {
+    display: block;
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.justify-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+    display: inline-block;
+}
+
+p {
+    margin: 0;
+}
+
+.btn {
+    padding: 11px 41px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    line-height: 21px;
+}
+
+@media screen and (max-width: 767px) {
+    .page-width {
+        padding: 0 20px;
+    }
+}
