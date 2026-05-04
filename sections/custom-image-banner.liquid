@@ -1,18 +1,20 @@
 {% style %}
- .section-{{ section.id }}{
-    padding-top:{{ section.settings.padding_top }}px;
-    padding-bottom:{{ section.settings.padding_bottom }}px;
+ .section-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
  }
  @media screen and (max-width: 767px) {
-    .section-{{ section.id }}{
-        padding-top:{{ section.settings.mobile_padding_top }}px;
-        padding-bottom:{{ section.settings.mobile_padding_bottom }}px;
+    .section-{{ section.id }} {
+        padding-top: {{ section.settings.mobile_padding_top }}px;
+        padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
     }
-    .section-{{ section.id }}.d-none{
+    .section-{{ section.id }}.d-none {
         display: none;
     }
  }
 {% endstyle %}
+
+<!-- Image Banner Section -->
 <div class="section-{{ section.id }} d-none">
     <img src="{{ section.settings.image | img_url: 'master' }}" alt="{{ section.settings.image.alt }}">
 </div>

@@ -6,12 +6,22 @@
  .section-{{ section.id }} .header-1-logo{
     width: {{ section.settings.logo_width }}px;
  }
- .section-{{ section.id }} .btn{
+ .section-{{ section.id }} .btn {
     background-color: {{ section.settings.btn_background }};
     color: {{ section.settings.btn_text_color }};
  }
- .section-{{ section.id }} .btn svg path{
+ .section-{{ section.id }} .btn svg path {
     fill: {{ section.settings.btn_icon_color }};
+ }
+ .section-{{ section.id }} .btn::before {
+    background: {{ section.settings.btn_hover_background }};
+ }
+ .section-{{ section.id }} .btn:hover {
+    color: {{ section.settings.btn_hover_text_color }} !important;
+    border-color: {{ section.settings.btn_hover_text_color }} !important;
+ }
+ .section-{{ section.id }} .btn:hover svg path {
+    fill: {{ section.settings.btn_hover_icon_color }} !important;
  }
  .section-{{ section.id }} .mobile-menu-toggle,
  .section-{{ section.id }} .mobile-menu-panel{
@@ -122,6 +132,24 @@
             "id": "btn_icon_color",
             "label": "Button Icon Color",
             "default": "#000"
+        },
+        {
+            "type": "color",
+            "id": "btn_hover_background",
+            "label": "Button Hover Background Color",
+            "default": "#000"
+        },
+        {
+            "type": "color",
+            "id": "btn_hover_text_color",
+            "label": "Button Hover Text Color",
+            "default": "#fff"
+        },
+        {
+            "type": "color",
+            "id": "btn_hover_icon_color",
+            "label": "Button Hover Icon Color",
+            "default": "#fff"
         }
     ],
     "blocks": [

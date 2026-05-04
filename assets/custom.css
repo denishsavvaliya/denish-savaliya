@@ -46,6 +46,7 @@ p {
     margin: 0;
 }
 
+/* --- Button Styles --- */
 .btn {
     padding: 11px 41px;
     display: flex;
@@ -53,6 +54,45 @@ p {
     align-items: center;
     gap: 18px;
     line-height: 21px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+/* Button Hover Animation (Slide & Color Change) */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: #fff; /* Invert background */
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+}
+
+.btn:hover::before {
+    width: 100%;
+}
+
+.btn:hover {
+    color: #000 !important;
+    border-color: #000;
+}
+
+.btn svg {
+    transition: transform 0.3s ease;
+}
+
+.btn:hover svg {
+    transform: translateX(8px);
+}
+
+.btn:hover svg path {
+    fill: #000 !important;
 }
 
 @media screen and (max-width: 767px) {

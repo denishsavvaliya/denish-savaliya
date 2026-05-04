@@ -140,9 +140,40 @@
   gap: 20px;
   justify-content: center;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: all 0.3s ease;
+  border: 1px solid #000;
+}
+.qv-atc::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #FFF544;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+}
+.qv-atc:hover::before {
+  width: 100%;
+}
+.qv-atc:hover {
+  color: #000 !important;
+}
+.qv-atc svg {
+  transition: transform 0.3s ease;
+}
+.qv-atc:hover svg {
+  transform: translateX(8px);
 }
 .qv-atc svg path {
   fill: #fff;
+}
+.qv-atc:hover svg path {
+  fill: #000 !important;
 }
 
 .quick-view-popup-close {
