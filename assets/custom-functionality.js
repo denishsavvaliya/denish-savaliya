@@ -1,4 +1,6 @@
+/* --- Custom Theme Functionality --- */
 (function () {
+  // Mobile Menu Toggle Logic
   document.addEventListener('click', function (event) {
     var toggle = event.target.closest('[data-mobile-menu-toggle]');
     if (!toggle) return;

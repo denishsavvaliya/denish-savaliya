@@ -1,19 +1,20 @@
+
 {% style %}
- .section-{{ section.id }}{
+ .section-{{ section.id }} {
     background-color: {{ section.settings.background_color }};
     text-align: {{ section.settings.text_alignment }};
-    padding-top:{{ section.settings.padding_top }}px;
-    padding-bottom:{{ section.settings.padding_bottom }}px;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
  }
- .section-{{ section.id }} .p-text{
+ .section-{{ section.id }} .p-text {
     padding: 10px 0;
     font-size: 16px;
     line-height: 1;
  }
-  .section-{{ section.id }} .d-desktop-none{
+ .section-{{ section.id }} .d-desktop-none {
     display: none;
  }
- .section-{{ section.id }} .d-mobile-none{
+ .section-{{ section.id }} .d-mobile-none {
     display: block;
  }
  @media screen and (max-width: 767px) {
@@ -32,6 +33,7 @@
     }
  }
 {% endstyle %}
+<!-- Text Headline -->
 <div class="section-{{ section.id }}">
     <div class="page-width">
         <p class="p-text d-mobile-none">{{ section.settings.text }}</p>

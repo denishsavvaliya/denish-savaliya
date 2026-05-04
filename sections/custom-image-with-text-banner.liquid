@@ -1,89 +1,100 @@
 {% style %}
- .section-{{ section.id }}{
+ .section-{{ section.id }} {
     padding: 10px 0;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
  }
- .section-{{ section.id }}.banner-with-text-wrapper .page-width{
+ .section-{{ section.id }}.banner-with-text-wrapper .page-width {
     padding-right: 0;
  }
- .section-{{ section.id }} .banner-wrapper{
+ .section-{{ section.id }} .banner-wrapper {
     gap: 10px;
  }
- .section-{{ section.id }} .banner-wrapper h1{
+ .section-{{ section.id }} .banner-wrapper h1 {
     font-size: 70px;
     line-height: 1;
     font-weight: 500;
     margin-bottom: 50px;
  }
- .section-{{ section.id }} .banner-wrapper p{
+ .section-{{ section.id }} .banner-wrapper p {
     font-size: 20px;
     line-height: 1.2;
     font-weight: 400;
     margin-bottom: 50px;
  }
- .section-{{ section.id }} .banner-image{
+ .section-{{ section.id }} .banner-image {
     max-width: calc(100% - 490px);
     flex: 0 0 calc(100% - 490px);
  }
- .section-{{ section.id }} .banner-text{
+ .section-{{ section.id }} .banner-text {
     max-width: 480px;
     flex: 0 0 480px;
  }
- .section-{{ section.id }} .banner-text .btn{
+ .section-{{ section.id }} .banner-text .btn {
     width: max-content;
  }
- .section-{{ section.id }} .d-desktop-none{
+ .section-{{ section.id }} .d-desktop-none {
     display: none;
  }
- .section-{{ section.id }} .d-mobile-none{
+ .section-{{ section.id }} .d-mobile-none {
     display: block;
  }
+
+ /* Dynamic Button Colors from Blocks */
  {% for block in section.blocks %}
- {% if block.type == 'text' %}
-    .section-{{ section.id }} .btn{
+    .section-{{ section.id }} .btn-{{ block.id }} {
         background-color: {{ block.settings.btn_background }};
         color: {{ block.settings.btn_text_color }};
     }
-    .section-{{ section.id }} .btn svg path{
-    fill: {{ block.settings.btn_icon_color }};
- }
- {% endif %}
+    .section-{{ section.id }} .btn-{{ block.id }} svg path {
+        fill: {{ block.settings.btn_icon_color }};
+    }
+    .section-{{ section.id }} .btn-{{ block.id }}::before {
+        background: {{ block.settings.btn_hover_background }};
+    }
+    .section-{{ section.id }} .btn-{{ block.id }}:hover {
+        color: {{ block.settings.btn_hover_text_color }} !important;
+        border-color: {{ block.settings.btn_hover_text_color }} !important;
+    }
+    .section-{{ section.id }} .btn-{{ block.id }}:hover svg path {
+        fill: {{ block.settings.btn_hover_icon_color }} !important;
+    }
  {% endfor %}
- .section-{{ section.id }}{
-    padding-top:{{ section.settings.padding_top }}px;
-    padding-bottom:{{ section.settings.padding_bottom }}px;
- }
+
+ /* Responsive Adjustments */
  @media screen and (max-width: 991px) {
-     .section-{{ section.id }} .page-width{
+     .section-{{ section.id }} .page-width {
         padding-left: 20px;
     }
-     .section-{{ section.id }} .banner-image{
+     .section-{{ section.id }} .banner-image {
         max-width: calc(60% - 10px);
         flex: 0 0 calc(60% - 10px);
     }
-    .section-{{ section.id }} .banner-text{
+    .section-{{ section.id }} .banner-text {
         max-width: 40%;
         flex: 0 0 40%;
     }
-     .section-{{ section.id }} .banner-wrapper h1{
+     .section-{{ section.id }} .banner-wrapper h1 {
         font-size: 30px;
         margin-bottom: 24px;
     }
-    .section-{{ section.id }} .banner-wrapper p{
+    .section-{{ section.id }} .banner-wrapper p {
         font-size: 16px;
         font-weight: 400;
         margin-bottom: 24px;
     }
  }
+
  @media screen and (max-width: 767px) {
-    .section-{{ section.id }}{
-        padding-top:{{ section.settings.mobile_padding_top }}px;
-        padding-bottom:{{ section.settings.mobile_padding_bottom }}px;
+    .section-{{ section.id }} {
+        padding-top: {{ section.settings.mobile_padding_top }}px;
+        padding-bottom: {{ section.settings.mobile_padding_bottom }}px;
     }
-     .section-{{ section.id }} .page-width{
+     .section-{{ section.id }} .page-width {
         padding-left: 0;
         padding-right: 0;
     }
-     .section-{{ section.id }} .banner-image{
+     .section-{{ section.id }} .banner-image {
         max-width: 100%;
         flex: 0 0 100%;
         position: relative;
@@ -91,44 +102,49 @@
      .section-{{ section.id }} .banner-text {
         text-align: center;
         padding: 50px 20px 12px 20px;
-    }
-    .section-{{ section.id }} .banner-text{
         max-width: 100%;
         flex: 0 0 100%;
     }
-    .section-{{ section.id }} .banner-wrapper .btn{
+    .section-{{ section.id }} .banner-wrapper .btn {
         position: absolute;
         bottom: 20px;
         left: 50%;
         transform: translateX(-50%);
     }
-    .section-{{ section.id }} .d-mobile-none{
+    .section-{{ section.id }} .d-mobile-none {
         display: none;
     }
-    .section-{{ section.id }} .d-desktop-none{
+    .section-{{ section.id }} .d-desktop-none {
         display: block;
     }
  }
 {% endstyle %}
+
+<!-- Image with Text Banner -->
 <header class="section-{{ section.id }} banner-with-text-wrapper">
     <div class="page-width">
         <div class="banner-wrapper flex justify-between align-center">
-        {% for block in section.blocks %}
-            {% if block.type == 'image' %}
-            <div class="banner-image">
-                <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
-                {% render 'button', button_text: block.settings.btn_text, button_url: block.settings.btn_url, class: 'd-desktop-none' %}
-            </div>
-            {% endif %}
-            {% if block.type == 'text' %}
-            <div class="banner-text">
-                <h1>{{ block.settings.title }}</h1>
-                <div class="d-mobile-none">{{ block.settings.text }}</div>
-                <div class="d-desktop-none">{{ block.settings.text-mobile }}</div>
-                {% render 'button', button_text: block.settings.btn_text, button_url: block.settings.btn_url, class: 'd-mobile-none' %}
-            </div>
-            {% endif %}
-        {% endfor %}
+            {% for block in section.blocks %}
+                <!-- Image Block -->
+                {% if block.type == 'image' %}
+                <div class="banner-image">
+                    <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
+                    {% assign btn_class = 'd-desktop-none btn-' | append: block.id %}
+                    {% render 'button', button_text: block.settings.btn_text, button_url: block.settings.btn_url, class: btn_class %}
+                </div>
+                {% endif %}
+
+                <!-- Text Block -->
+                {% if block.type == 'text' %}
+                <div class="banner-text">
+                    <h1>{{ block.settings.title }}</h1>
+                    <div class="d-mobile-none">{{ block.settings.text }}</div>
+                    <div class="d-desktop-none">{{ block.settings.text-mobile }}</div>
+                    {% assign btn_class_mobile = 'd-mobile-none btn-' | append: block.id %}
+                    {% render 'button', button_text: block.settings.btn_text, button_url: block.settings.btn_url, class: btn_class_mobile %}
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 </header>
@@ -212,6 +228,24 @@
                     "id": "btn_icon_color",
                     "label": "Button Icon Color",
                     "default": "#fff"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_hover_background",
+                    "label": "Button Hover Background Color",
+                    "default": "#fff"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_hover_text_color",
+                    "label": "Button Hover Text Color",
+                    "default": "#000"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_hover_icon_color",
+                    "label": "Button Hover Icon Color",
+                    "default": "#000"
                 }
             ]
         },
@@ -265,6 +299,24 @@
                     "id": "btn_icon_color",
                     "label": "Button Icon Color",
                     "default": "#fff"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_hover_background",
+                    "label": "Button Hover Background Color",
+                    "default": "#fff"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_hover_text_color",
+                    "label": "Button Hover Text Color",
+                    "default": "#000"
+                },
+                {
+                    "type": "color",
+                    "id": "btn_hover_icon_color",
+                    "label": "Button Hover Icon Color",
+                    "default": "#000"
                 }
             ]
         }
