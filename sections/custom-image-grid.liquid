@@ -36,6 +36,123 @@
   .section-{{ section.id }} .quick-view-popup{
     display: none; 
   }
+  .section-{{ section.id }} .quick-view-popup.is-open{
+    display: flex;
+  }
+  .section-{{ section.id }} .quick-view-popup .quick-view-popup-variant{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .quick-view-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.quick-view-popup.is-open {
+  display: flex;
+}
+
+.quick-view-popup-inner {
+  background: #f3f3f3;
+  width: 350px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 17px;
+  position: relative;
+}
+.qv-left{
+  width: 120px;
+}
+.qv-right{
+  width: calc(100% - 128px);
+}
+
+.qv-left img {
+  width: 120px;
+  height: 140px;
+  object-fit: cover;
+}
+
+.qv-right h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.qv-price {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.qv-desc {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+/* COLOR PILLS */
+.qv-option{
+  width: 100%;
+}
+.qv-colors {
+  display: flex;
+  border: 1px solid #000;
+}
+
+.qv-color {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.qv-color.active {
+  background: #000;
+  color: #fff;
+}
+
+/* SIZE */
+.qv-size {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #000;
+}
+
+/* BUTTON */
+.qv-atc {
+  margin-top: 20px;
+  width: 100%;
+  background: #000;
+  color: #fff;
+  padding: 14px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  text-align: center;
+}
+.qv-atc svg path {
+  fill: #fff;
+}
+
+.quick-view-popup-close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  background: none;
+  border: none;
+  font-size: 18px;
+}
   @media screen and (max-width: 767px) {
     .section-{{ section.id }} .image-grid-wrapper{
         gap: 4px;
@@ -53,34 +170,259 @@
             {% for block in section.blocks %}
             <div class="image-grid-item">
                 <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
-                <span class="quick-add" style="top:{{ block.settings.quick_add_top }}%;right:{{ block.settings.quick_add_right }}%;">
+                {% assign product = block.settings.product %}
+                <button class="quick-add" type="button" style="top:{{ block.settings.quick_add_top }}%;right:{{ block.settings.quick_add_right }}%;" data-product-popup-open="{{ product.id }}" aria-label="Open product">
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.98047 0.75V9.21154" stroke="black" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
                     <path d="M0.75 4.98071H9.21154" stroke="black" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
                 </svg>
-                </span>
-            </div>
-            <div class="quick-view-popup">
-                <div class="quick-view-popup-inner">
-                    <div class="quick-view-popup-image">
-                        <img src="{{ block.settings.image | img_url: 'master' }}" alt="{{ block.settings.image.alt }}">
-                    </div>
-                    <div class="quick-view-popup-content">
-                        <h2>{{ block.settings.title }}</h2>
-                        <p>{{ block.settings.price }}</p>
-                        <p>{{ block.settings.description }}</p>
-                        <a href="{{ block.settings.url }}" class="quick-view-popup-button">View Product</a>
-                    </div>
-                </div>
+                </button>
             </div>
             {% endfor %}
         </div>
+        {% for block in section.blocks %}
+        {% assign product = block.settings.product %}
+        <div class="quick-view-popup" data-product-popup="{{ product.id }}" hidden>
+  <div class="quick-view-popup-inner">
+    {% if product != blank %}
+      <script type="application/json" data-product-json>{
+  "id": {{ product.id }},
+  "options": {{ product.options | json }},
+  "variants": {{ product.variants | json }}
+}</script>
+    {% endif %}
+
+    <button class="quick-view-popup-close" data-product-popup-close>
+      ✕
+    </button>
+
+    <!-- LEFT IMAGE -->
+    <div class="qv-left">
+      <img 
+        src="{{ product.featured_image | img_url: '600x' }}" 
+        data-popup-image
+      >
+    </div>
+
+    <!-- RIGHT CONTENT -->
+    <div class="qv-right">
+
+      <h2 data-popup-title>{{ product.title }}</h2>
+      <p class="qv-price" data-popup-price>{{ product.price | money }}</p>
+      <div class="qv-desc">{{ product.description | strip_html | truncate: 120 }}</div>
+    </div>
+     <!-- COLOR (PILLS) -->
+      {% assign color_option = product.options_with_values | where: "name", "Color" | first %}
+      {% if color_option %}
+      <div class="qv-option">
+        <p>Color</p>
+        <div class="qv-colors">
+          {% for value in color_option.values %}
+            <button 
+              type="button"
+              class="qv-color"
+              data-option="Color"
+              data-value="{{ value }}"
+            >
+              {{ value }}
+            </button>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- SIZE (DROPDOWN) -->
+      {% assign size_option = product.options_with_values | where: "name", "Size" | first %}
+      {% if size_option %}
+      <div class="qv-option">
+        <p>Size</p>
+        <select class="qv-size" data-option="Size">
+          <option value="">Choose your size</option>
+          {% for value in size_option.values %}
+            <option value="{{ value }}">{{ value }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% endif %}
+
+      <button class="qv-atc" data-popup-add>
+        ADD TO CART 
+        <svg width="26" height="12" viewBox="0 0 26 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.75 4.77298L7.37629e-08 4.77298L-7.37629e-08 6.27298L0.75 6.27298L0.75 4.77298ZM25.2803 6.05331C25.5732 5.76042 25.5732 5.28554 25.2803 4.99265L20.5074 0.21968C20.2145 -0.073213 19.7396 -0.0732131 19.4467 0.21968C19.1538 0.512574 19.1538 0.987447 19.4467 1.28034L23.6893 5.52298L19.4467 9.76562C19.1538 10.0585 19.1538 10.5334 19.4467 10.8263C19.7396 11.1192 20.2145 11.1192 20.5074 10.8263L25.2803 6.05331ZM0.75 6.27298L24.75 6.27298L24.75 4.77298L0.75 4.77298L0.75 6.27298Z" fill="black"/>
+        </svg> 
+      </button>
+  </div>
+</div>
+        {% endfor %}
     </div>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
+  let selectedOptions = {};
+
+  document.querySelectorAll("[data-product-popup-open]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.productPopupOpen;
+      const popup = document.querySelector(`[data-product-popup="${id}"]`);
+      
+      if (!popup) return;
+
+      popup.classList.add("is-open");
+      popup.removeAttribute("hidden");
+
+      selectedOptions = {};
+
+      const firstColor = popup.querySelector(".qv-color");
+      if (firstColor) {
+        firstColor.classList.add("active");
+        selectedOptions["Color"] = firstColor.dataset.value;
+      }
+
+      const size = popup.querySelector(".qv-size");
+      if (size && size.options.length > 1) {
+        size.selectedIndex = 1;
+        selectedOptions["Size"] = size.value;
+      }
+    });
+  });
+
+  document.querySelectorAll("[data-product-popup-close]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const popup = btn.closest(".quick-view-popup");
+      if (popup) {
+        popup.classList.remove("is-open");
+        popup.setAttribute("hidden", "true");
+      }
+    });
+  });
+
+  document.querySelectorAll(".qv-color").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const parent = btn.closest(".qv-colors");
+      if (!parent) return;
+
+      parent.querySelectorAll(".qv-color").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      selectedOptions["Color"] = btn.dataset.value;
+    });
+  });
+
+  document.querySelectorAll(".qv-size").forEach(select => {
+    select.addEventListener("change", () => {
+      selectedOptions["Size"] = select.value;
+    });
+  });
+
+  document.querySelectorAll("[data-popup-add]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const popup = btn.closest(".quick-view-popup");
+      if (!popup) return;
+
+      const jsonEl = popup.querySelector("[data-product-json]");
+      if (!jsonEl) {
+        alert("Product data missing");
+        return;
+      }
+
+      const productData = JSON.parse(jsonEl.textContent);
+      if (!productData?.variants?.length) {
+        alert("Variants not found");
+        return;
+      }
+
+      const selected = [];
+      productData.options.forEach(optionName => {
+        if (optionName === "Color") {
+          selected.push(selectedOptions["Color"] || null);
+        } else if (optionName === "Size") {
+          selected.push(selectedOptions["Size"] || null);
+        } else {
+          selected.push(null);
+        }
+      });
+
+      const variant = productData.variants.find(v => {
+        return v.options.every((opt, i) => {
+          return !selected[i] || opt === selected[i];
+        });
+      });
+
+      if (!variant) {
+        alert("Please select options");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Adding...";
+
+      try {
+        await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: variant.id,
+            quantity: 1
+          })
+        });
+
+        popup.classList.remove("is-open");
+        popup.setAttribute("hidden", true);
+
+        document.dispatchEvent(new Event("cart:refresh"));
+       window.location.href = '/cart';
+      } catch (err) {
+        console.error(err);
+        alert("Error adding to cart");
+      }
+
+      btn.disabled = false;
+      btn.innerText = "ADD TO CART";
+    });
+  });
+
+});
+</script>
 {% schema %}
 {
     "name": "Custom Image Grid",
+    "blocks": [
+        {
+            "type": "image_block",
+            "name": "Image Block",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+                },
+                {
+                    "type": "range",
+                    "id": "quick_add_top",
+                    "label": "Quick Add Top (%)",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "default": 10
+                },
+                {
+                    "type": "range",
+                    "id": "quick_add_right",
+                    "label": "Quick Add Right (%)",
+                    "min": 0,
+                    "max": 100,
+                    "step": 1,
+                    "default": 10
+                },
+                {
+                    "type": "product",
+                    "id": "product",
+                    "label": "Product"
+                }
+            ]
+        }
+    ],
     "settings": [
         {
             "type": "color",

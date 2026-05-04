@@ -365,6 +365,7 @@
         countrySelectorSearchCount: `{{ 'localization.country_results_count' | t: count: '[count]' }}`,
       };
     </script>
+    <script src="{{ 'custom-functionality.js' | asset_url }}" defer></script>
 
     {%- if settings.predictive_search_enabled -%}
       <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>

@@ -13,10 +13,35 @@
  .section-{{ section.id }} .btn svg path{
     fill: {{ section.settings.btn_icon_color }};
  }
+ .section-{{ section.id }} .mobile-menu-toggle,
+ .section-{{ section.id }} .mobile-menu-panel{
+    display: none;
+ }
+  @media screen and (max-width: 767px){
+     .section-{{ section.id }}{
+        padding: 25px 0;
+     }
+ }
 {% endstyle %}
+
 <header class="section-{{ section.id }}">
     <div class="page-width">
         <div class="header-1-wrapper flex justify-between align-center">
+            <button class="mobile-menu-toggle" type="button" aria-expanded="false" aria-label="Open menu" data-mobile-menu-toggle>
+                <span class="mobile-menu-toggle__open">
+                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 6H19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 1H19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 11H19" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <span class="mobile-menu-toggle__close">
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 13.9994L13.7279 1.27147" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 1L13.7279 13.7279" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </button>
             <a class="header-1-logo" href="{{ routes.root_url }}">
                 {% if section.settings.logo %}
                 <img src="{{ section.settings.logo | img_url: 'master' }}" alt="{{ section.settings.logo.alt }}">
@@ -28,6 +53,12 @@
                 <p>{{ section.settings.text }}</p>
             </div>
             {% render 'button', button_text: section.settings.btn_text, button_url: section.settings.btn_url %}
+        </div>
+        <div class="mobile-menu-panel" data-mobile-menu-panel>
+            <div class="mobile-menu-panel__inner">
+                <p>{{ section.settings.text }}</p>
+                {% render 'button', button_text: section.settings.btn_text, button_url: section.settings.btn_url %}
+            </div>
         </div>
     </div>
 </header>
